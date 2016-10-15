@@ -1,5 +1,6 @@
 /**
  * @author mrdoob / http://mrdoob.com/
+ * @author danrossi / https://github.com/danrossi
  */
 
 export default class PointerLockControls {
@@ -22,7 +23,7 @@ export default class PointerLockControls {
 		return  Math.PI / 2;
 	}
 
-	onMouseMove = (event) => {
+	onMouseMove(event) {
 
 		//if ( this.enabled === false ) return;
 
@@ -37,11 +38,12 @@ export default class PointerLockControls {
 	}
 
 	dispose() {
-		document.removeEventListener( 'mousemove', this.onMouseMove, false );
+		document.removeEventListener( 'mousemove', this.onMouseMoveRef, false );
 	}
 
 	start() {
-		document.addEventListener( 'mousemove', this.onMouseMove, false );
+		this.onMouseMoveRef = (event) => this.onMouseMove(event);
+		document.addEventListener( 'mousemove', this.onMouseMoveRef, false );
 	}
 
 	getDirection(vector) {
