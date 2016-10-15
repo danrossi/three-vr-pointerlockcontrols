@@ -3,7 +3,7 @@
  * @author danrossi / https://github.com/danrossi
  */
 
-export default class PointerLockControls {
+class PointerLockControls {
 
 	constructor( camera ) {
 
@@ -65,3 +65,5 @@ export default class PointerLockControls {
 		return this.yawObject;
 	}
 }
+
+export { PointerLockControls };
