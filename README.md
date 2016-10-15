@@ -11,6 +11,7 @@ In the main app add
 
 ```
 export { PointerLockControls } from '../three-vr-pointerlockcontrols/src/PointerLockControls.js';
+export { PointerLockUtils } from '../three-vr-pointerlockcontrols/src/utils/PointerLockUtils.js';
 ```
 
 Install some requirements into the custom Three.js build directory.
@@ -57,3 +58,40 @@ export default {
 
 ```
 
+Usage
+=====
+
+First check for api support before setup.
+
+```
+if (THREE.PointerLockUtils.hasPointerLock()) {
+			this.pointerLockControls = new THREE.PointerLockControls( this.camera, this.scene, document.body );
+            this.pointerLockControls.addEventListener("pointerlocked", (event) => {
+                this.emit("pointerlocked", true);
+
+            });
+
+            this.pointerLockControls.addEventListener("pointerunlocked", (event) => {
+                this.emit("pointerlocked", false);
+
+            });
+
+            this.pointerLockControls.addEventListener("pointerlockerror", (event) => {
+                this.emit("pointerlocked", false);
+
+            });
+
+}
+```
+
+To start pointerlock
+
+```
+this.pointerLockControls.start();
+```
+
+To manually stop via a custom key command.
+
+```
+this.pointerLockControls.stop();
+```
