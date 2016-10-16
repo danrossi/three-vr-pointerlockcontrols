@@ -28,7 +28,7 @@ class PointerLockControls extends EventDispatcher {
 		//this.pitchObject.add(camera);
 
 		this.yawObject = new THREE.Object3D();
-		this.yawObject.position.y = 10;
+		//this.yawObject.position.y = 10;
 		this.yawObject.add(this.pitchObject);
 	}
 
@@ -55,6 +55,11 @@ class PointerLockControls extends EventDispatcher {
 		this.pitchObject.rotation.x -= movementY * 0.002;
 
 		this.pitchObject.rotation.x = Math.max( - PointerLockControls.PI_2, Math.min( PointerLockControls.PI_2, this.pitchObject.rotation.x ) );
+
+		//update the camera rotation directly.
+		var rotation = new THREE.Euler( 0, 0, 0, "YXZ" );
+		rotation.set( this.pitchObject.rotation.x, this.yawObject.rotation.y, 0 );
+		this.camera.setRotationFromEuler(rotation);
 	}
 
 	/**
@@ -101,8 +106,14 @@ class PointerLockControls extends EventDispatcher {
 		document.removeEventListener( 'mozpointerlockerror', this.onPointerLockErrorRef, false );
 		document.removeEventListener( 'webkitpointerlockerror', this.onPointerLockErrorRef, false );
 
-		this.pitchObject.remove(this.camera);
-		this.scene.remove(this.yawObject);
+		//this.pitchObject.remove(this.camera);
+		//this.scene.remove(this.yawObject);
+
+
+		//update the camera to the current pointer control position.
+		//var rotation = new THREE.Euler( 0, 0, 0, "YXZ" );
+		//rotation.set( this.pitchObject.rotation.x, this.yawObject.rotation.y, 0 );
+		//this.camera.setRotationFromEuler(rotation);
 	}
 
 	/**
@@ -134,16 +145,24 @@ class PointerLockControls extends EventDispatcher {
 		document.addEventListener( 'mozpointerlockerror', this.onPointerLockErrorRef, false );
 		document.addEventListener( 'webkitpointerlockerror', this.onPointerLockErrorRef, false );
 
+
+		//update the rotations from the camera. 
+		this.yawObject.rotation.y = this.camera.rotation.y;
+		this.pitchObject.rotation.x = this.camera.rotation.x;
+
+		//reset the camera, this could be changed to the current position ?
+		//this.camera.rotation.set(0, 0, 0);
+
 		//add these on demand so they don't interfere with other controls.
-		this.pitchObject.add(this.camera);
-		this.scene.add(this.yawObject);
+		//this.pitchObject.add(this.camera);
+		//this.scene.add(this.yawObject);
 
 		//request the pointer lock api with the specified element.
 		PointerLockUtils.requestPointerLock(this.pointerElement);
 
 	}
 
-	getDirection(vector) {
+	/*getDirection(vector) {
 
 		// assumes the camera itself is not rotated
 
@@ -160,7 +179,7 @@ class PointerLockControls extends EventDispatcher {
 
 	getObject() {
 		return this.yawObject;
-	}
+	}*/
 }
 
 export { PointerLockControls };
