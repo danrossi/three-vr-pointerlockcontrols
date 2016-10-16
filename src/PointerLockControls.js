@@ -146,7 +146,7 @@ class PointerLockControls extends EventDispatcher {
 		document.addEventListener( 'webkitpointerlockerror', this.onPointerLockErrorRef, false );
 
 
-		//update the rotations from the camera. 
+		//update the rotations from the camera.
 		this.yawObject.rotation.y = this.camera.rotation.y;
 		this.pitchObject.rotation.x = this.camera.rotation.x;
 
