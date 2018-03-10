@@ -18,8 +18,6 @@ class PointerLockControls extends EventDispatcher {
 
 		super();
 
-		//camera.rotation.set(0, 0, 0);
-
 		this.camera = camera;
 		this.scene = scene;
 		this.pointerElement = element;
@@ -31,6 +29,7 @@ class PointerLockControls extends EventDispatcher {
 		//this.yawObject.position.y = 10;
 		this.yawObject.add(this.pitchObject);
 	}
+
 
 	/**
 	 * static half PI
@@ -61,6 +60,8 @@ class PointerLockControls extends EventDispatcher {
 		rotation.set( this.pitchObject.rotation.x, this.yawObject.rotation.y, 0 );
 		this.camera.setRotationFromEuler(rotation);
 	}
+
+
 
 	/**
 	 * Pointer lock change.
@@ -106,8 +107,8 @@ class PointerLockControls extends EventDispatcher {
 		document.removeEventListener( 'mozpointerlockerror', this.onPointerLockErrorRef, false );
 		document.removeEventListener( 'webkitpointerlockerror', this.onPointerLockErrorRef, false );
 
-		//this.pitchObject.remove(this.camera);
-		//this.scene.remove(this.yawObject);
+		this.pitchObject.remove(this.camera);
+		this.scene.remove(this.yawObject);
 
 
 		//update the camera to the current pointer control position.
@@ -147,15 +148,15 @@ class PointerLockControls extends EventDispatcher {
 
 
 		//update the rotations from the camera.
-		this.yawObject.rotation.y = this.camera.rotation.y;
-		this.pitchObject.rotation.x = this.camera.rotation.x;
+		//this.yawObject.rotation.y = this.camera.rotation.y;
+		//this.pitchObject.rotation.x = this.camera.rotation.x;
 
 		//reset the camera, this could be changed to the current position ?
 		//this.camera.rotation.set(0, 0, 0);
 
 		//add these on demand so they don't interfere with other controls.
-		//this.pitchObject.add(this.camera);
-		//this.scene.add(this.yawObject);
+		this.pitchObject.add(this.camera);
+		this.scene.add(this.yawObject);
 
 		//request the pointer lock api with the specified element.
 		PointerLockUtils.requestPointerLock(this.pointerElement);
@@ -183,3 +184,4 @@ class PointerLockControls extends EventDispatcher {
 }
 
 export { PointerLockControls };
+
