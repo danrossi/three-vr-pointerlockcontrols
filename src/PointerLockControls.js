@@ -6,6 +6,9 @@
 import { EventDispatcher } from '../../three.js/src/core/EventDispatcher';
 import { PointerLockUtils } from './utils/PointerLockUtils';
 
+const euler = new Euler( 0, 0, 0, 'YXZ' ),
+PI_2 = Math.PI / 2;
+
 class PointerLockControls extends EventDispatcher {
 
 	/**
@@ -22,22 +25,12 @@ class PointerLockControls extends EventDispatcher {
 		this.scene = scene;
 		this.pointerElement = element;
 
-		this.pitchObject = new THREE.Object3D();
+		//this.pitchObject = new THREE.Object3D();
 		//this.pitchObject.add(camera);
 
-		this.yawObject = new THREE.Object3D();
+		//this.yawObject = new THREE.Object3D();
 		//this.yawObject.position.y = 10;
-		this.yawObject.add(this.pitchObject);
-	}
-
-
-	/**
-	 * static half PI
-	 * @returns {number} half PI
-	 * @constructor
-	 */
-	static get PI_2() {
-		return  Math.PI / 2;
+		//this.yawObject.add(this.pitchObject);
 	}
 
 	/**
@@ -47,18 +40,29 @@ class PointerLockControls extends EventDispatcher {
 	onMouseMove(event) {
 
 		//if ( this.enabled === false ) return;
-		var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-		var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+		const movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+		const movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
-		this.yawObject.rotation.y -= movementX * 0.002;
-		this.pitchObject.rotation.x -= movementY * 0.002;
+		//this.yawObject.rotation.y -= movementX * 0.002;
+		//this.pitchObject.rotation.x -= movementY * 0.002;
 
-		this.pitchObject.rotation.x = Math.max( - PointerLockControls.PI_2, Math.min( PointerLockControls.PI_2, this.pitchObject.rotation.x ) );
+		//this.pitchObject.rotation.x = Math.max( - PointerLockControls.PI_2, Math.min( PointerLockControls.PI_2, this.pitchObject.rotation.x ) );
 
 		//update the camera rotation directly.
-		var rotation = new THREE.Euler( 0, 0, 0, "YXZ" );
-		rotation.set( this.pitchObject.rotation.x, this.yawObject.rotation.y, 0 );
-		this.camera.setRotationFromEuler(rotation);
+		//var rotation = new THREE.Euler( 0, 0, 0, "YXZ" );
+		//rotation.set( this.pitchObject.rotation.x, this.yawObject.rotation.y, 0 );
+		//this.camera.setRotationFromEuler(rotation);
+
+		euler.setFromQuaternion( this.camera.quaternion );
+
+		euler.y -= movementX * 0.002;
+		euler.x -= movementY * 0.002;
+
+		euler.x = Math.max( - PI_2, Math.min( PI_2, euler.x ) );
+
+		this.camera.quaternion.setFromEuler( euler );
+
+
 	}
 
 
@@ -107,8 +111,8 @@ class PointerLockControls extends EventDispatcher {
 		document.removeEventListener( 'mozpointerlockerror', this.onPointerLockErrorRef, false );
 		document.removeEventListener( 'webkitpointerlockerror', this.onPointerLockErrorRef, false );
 
-		this.pitchObject.remove(this.camera);
-		this.scene.remove(this.yawObject);
+		//this.pitchObject.remove(this.camera);
+		//this.scene.remove(this.yawObject);
 
 
 		//update the camera to the current pointer control position.
@@ -155,8 +159,8 @@ class PointerLockControls extends EventDispatcher {
 		//this.camera.rotation.set(0, 0, 0);
 
 		//add these on demand so they don't interfere with other controls.
-		this.pitchObject.add(this.camera);
-		this.scene.add(this.yawObject);
+		//this.pitchObject.add(this.camera);
+		//this.scene.add(this.yawObject);
 
 		//request the pointer lock api with the specified element.
 		PointerLockUtils.requestPointerLock(this.pointerElement);
