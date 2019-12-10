@@ -6,6 +6,9 @@
 import { EventDispatcher } from '../../three.js/src/core/EventDispatcher';
 import { PointerLockUtils } from './utils/PointerLockUtils';
 
+import { Euler } from '../../three.js/src/math/Euler.js';
+
+
 const euler = new Euler( 0, 0, 0, 'YXZ' ),
 PI_2 = Math.PI / 2;
 
