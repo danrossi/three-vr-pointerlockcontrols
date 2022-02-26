@@ -7,10 +7,12 @@ import { EventDispatcher } from '../../three.js/src/core/EventDispatcher';
 import { PointerLockUtils } from './utils/PointerLockUtils';
 
 import { Euler } from '../../three.js/src/math/Euler.js';
+import { Vector3 } from '../../three.js/src/math/Vector3.js';
 
+const _euler = new Euler( 0, 0, 0, 'YXZ' ),
+_vector = new Vector3(),
+_PI_2 = Math.PI / 2;
 
-const euler = new Euler( 0, 0, 0, 'YXZ' ),
-PI_2 = Math.PI / 2;
 
 class PointerLockControls extends EventDispatcher {
 
@@ -36,26 +38,22 @@ class PointerLockControls extends EventDispatcher {
 	 * Pointer lock mouse movements. Handles rotation of yaw and pitch.
 	 * @param event
 	 */
-	onMouseMove(event) {
+	onMouseMove( event ) {
 
-		//if ( this.enabled === false ) return;
+		if ( this.isLocked === false ) return;
+
 		const movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
 		const movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
-		euler.setFromQuaternion( this.camera.quaternion );
+		_euler.setFromQuaternion( this.camera.quaternion );
 
-		euler.y -= movementX * 0.002;
-		euler.x -= movementY * 0.002;
+		_euler.y -= movementX * 0.002;
+		_euler.x -= movementY * 0.002;
 
-		euler.x = Math.max( - PI_2, Math.min( PI_2, euler.x ) );
+		_euler.x = Math.max( _PI_2 - this.maxPolarAngle, Math.min( _PI_2 - this.minPolarAngle, _euler.x ) );
 
-		euler.x = Math.max( PI_2 - this.maxPolarAngle, Math.min( PI_2 - this.minPolarAngle, euler.x ) );
-
-		this.camera.quaternion.setFromEuler( euler );
-
+		this.camera.quaternion.setFromEuler( _euler );
 	}
-
-
 
 	/**
 	 * Pointer lock change.
