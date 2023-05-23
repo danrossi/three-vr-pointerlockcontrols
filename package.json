@@ -1,5 +1,5 @@
 {
-    "name": "three-vr-omnitone",
+    "name": "three-vr-pointerlockcontrols",
     "version": "0.153.0",
     "description": "Three.js Omnitone Rotater",
     "main": "build/three-vr-omnitone.js",
