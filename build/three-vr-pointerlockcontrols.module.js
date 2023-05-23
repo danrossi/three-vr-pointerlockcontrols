@@ -1,23 +1,54 @@
+import { Euler, Vector3, EventDispatcher } from 'three';
+
+class PointerLockUtils {
+
+    /**
+     * Check for pointerlock api support.
+     * @returns {boolean}
+     */
+    static hasPointerLock() {
+        return 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+    }
+
+    /**
+     * Request the pointer lock api.
+     * @param element
+     */
+    static requestPointerLock(element) {
+        element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+        element.requestPointerLock();
+    }
+
+    /**
+     * Exit the pointer lock api.
+     * @param element
+     */
+    static exitPointerLock(element) {
+        element.exitPointerLock = element.exitPointerLock || element.mozExitPointerLock || element.webkitExitPointerLock;
+        element.exitPointerLock();
+    }
+
+    /**
+     * Check if the current element is locked.
+     * @param element
+     * @returns {boolean}
+     */
+    static isPointerLocked(element) {
+        return document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element;
+    }
+}
+
 /**
  * @author mrdoob / http://mrdoob.com/
  * @author danrossi / https://github.com/danrossi
  */
 
-import { PointerLockUtils } from './utils/PointerLockUtils';
+const _euler = new Euler( 0, 0, 0, 'YXZ' );
+new Vector3();
+const _PI_2 = Math.PI / 2;
 
 
-import {
-	EventDispatcher,
-	Euler,
-	Vector3
-} from 'three';
-
-const _euler = new Euler( 0, 0, 0, 'YXZ' ),
-_vector = new Vector3(),
-_PI_2 = Math.PI / 2;
-
-
-export default class PointerLockControls extends EventDispatcher {
+class PointerLockControls extends EventDispatcher {
 
 	/**
 	 *
@@ -150,3 +181,4 @@ export default class PointerLockControls extends EventDispatcher {
 
 }
 
+export { PointerLockControls };
