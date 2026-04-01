@@ -1,4 +1,4 @@
-import { EventDispatcher, Euler, Vector3 } from 'three';
+import { Euler, Vector3, EventDispatcher } from 'three';
 
 class PointerLockUtils {
 
@@ -43,9 +43,10 @@ class PointerLockUtils {
  * @author danrossi / https://github.com/danrossi
  */
 
-const _euler = new Euler( 0, 0, 0, 'YXZ' ),
-_vector = new Vector3(),
-_PI_2 = Math.PI / 2;
+
+const _euler = new Euler( 0, 0, 0, 'YXZ' );
+new Vector3();
+const _PI_2 = Math.PI / 2;
 
 
 class PointerLockControls extends EventDispatcher {
