@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => {
       //license: true,
       emptyOutDir: false,
       lib: {
-        entry: ['./src/PointerLockControls.js'],
+        entry: ['./three-vr-pointerlockcontrols.js'],
         fileName: (format, entryName) => {
           return `three-vr-pointerlockcontrols.module.js`;
         },
