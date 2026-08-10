@@ -1,185 +1,87 @@
-import { Euler, Vector3, EventDispatcher } from 'three';
-
-class PointerLockUtils {
-
-    /**
-     * Check for pointerlock api support.
-     * @returns {boolean}
-     */
-    static hasPointerLock() {
-        return 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
-    }
-
-    /**
-     * Request the pointer lock api.
-     * @param element
-     */
-    static requestPointerLock(element) {
-        element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-        element.requestPointerLock();
-    }
-
-    /**
-     * Exit the pointer lock api.
-     * @param element
-     */
-    static exitPointerLock(element) {
-        element.exitPointerLock = element.exitPointerLock || element.mozExitPointerLock || element.webkitExitPointerLock;
-        element.exitPointerLock();
-    }
-
-    /**
-     * Check if the current element is locked.
-     * @param element
-     * @returns {boolean}
-     */
-    static isPointerLocked(element) {
-        return document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element;
-    }
-}
-
-/**
- * @author mrdoob / http://mrdoob.com/
- * @author danrossi / https://github.com/danrossi
- */
-
-
-const _euler = new Euler( 0, 0, 0, 'YXZ' );
-new Vector3();
-const _PI_2 = Math.PI / 2;
-
-
-class PointerLockControls extends EventDispatcher {
-
-	/**
-	 *
-	 * @param {Camera} camera
-	 * @param {Scene} scene
-	 * @param element the element to lock the pointer to.
-	 */
-	constructor( camera, scene, element ) {
-
+import { Euler, EventDispatcher } from "three";
+//#region src/utils/PointerLockUtils.js
+var PointerLockUtils = class {
+	static hasPointerLock() {
+		return "pointerLockElement" in document || "mozPointerLockElement" in document || "webkitPointerLockElement" in document;
+	}
+	static requestPointerLock(element) {
+		element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+		element.requestPointerLock();
+	}
+	static exitPointerLock(element) {
+		element.exitPointerLock = element.exitPointerLock || element.mozExitPointerLock || element.webkitExitPointerLock;
+		element.exitPointerLock();
+	}
+	static isPointerLocked(element) {
+		return document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element;
+	}
+};
+//#endregion
+//#region src/PointerLockControls.js
+var _euler = new Euler(0, 0, 0, "YXZ");
+var _PI_2 = Math.PI / 2;
+var PointerLockControls = class extends EventDispatcher {
+	constructor(camera, scene, element) {
 		super();
-
 		this.camera = camera;
 		this.scene = scene;
 		this.pointerElement = element;
-
-		this.minPolarAngle = 0; // radians
-		this.maxPolarAngle = Math.PI; // radians
+		this.isLocked = false;
+		this.minPolarAngle = 0;
+		this.maxPolarAngle = Math.PI;
 	}
-
-	/**
-	 * Pointer lock mouse movements. Handles rotation of yaw and pitch.
-	 * @param event
-	 */
-	onMouseMove( event ) {
-
-		if ( this.isLocked === false ) return;
-
+	onMouseMove(event) {
+		if (this.isLocked === false) return;
 		const movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
 		const movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
-
-		_euler.setFromQuaternion( this.camera.quaternion );
-
-		_euler.y -= movementX * 0.002;
-		_euler.x -= movementY * 0.002;
-
-		_euler.x = Math.max( _PI_2 - this.maxPolarAngle, Math.min( _PI_2 - this.minPolarAngle, _euler.x ) );
-
-		this.camera.quaternion.setFromEuler( _euler );
+		_euler.setFromQuaternion(this.camera.quaternion);
+		_euler.y -= movementX * .002;
+		_euler.x -= movementY * .002;
+		_euler.x = Math.max(_PI_2 - this.maxPolarAngle, Math.min(_PI_2 - this.minPolarAngle, _euler.x));
+		this.camera.quaternion.setFromEuler(_euler);
 	}
-
-	/**
-	 * Pointer lock change.
-	 * intitiates mouse movements on pointer lock or dispose events on exit.
-	 * @param event
-	 */
 	onPointerLockChange(event) {
-
-		if ( PointerLockUtils.isPointerLocked(this.pointerElement)) {
-			
-
-			this.dispatchEvent( { type: "pointerlocked" });
-
-		} else {
-			this.dispatchEvent( { type: "pointerunlocked" });
-
+		if (PointerLockUtils.isPointerLocked(this.pointerElement)) this.dispatchEvent({ type: "pointerlocked" });
+		else {
+			this.dispatchEvent({ type: "pointerunlocked" });
 			this.dispose();
 		}
 	}
-
-	/**
-	 * Dispose events on pointer lock error
-	 * @param event
-	 */
 	onPointerLockError(event) {
-		this.dispatchEvent( { type: "pointerlockerror" });
+		this.dispatchEvent({ type: "pointerlockerror" });
 		this.dispose();
 	}
-
-	/**
-	 * Dispose all pointer lock ad mouse events.
-	 * Remove the camera from the pitch object.
-	 * Remove the yaw object from the scene.
-	 */
 	dispose() {
-		document.removeEventListener( 'mousemove', this.onMouseMoveRef, false );
-		document.removeEventListener( 'pointerlockchange', this.onPointerLockChangeRef, false );
-		document.removeEventListener( 'mozpointerlockchange', this.onPointerLockChangeRef, false );
-		document.removeEventListener( 'webkitpointerlockchange', this.onPointerLockChangeRef, false );
-
-		document.removeEventListener( 'pointerlockerror', this.onPointerLockErrorRef, false );
-		document.removeEventListener( 'mozpointerlockerror', this.onPointerLockErrorRef, false );
-		document.removeEventListener( 'webkitpointerlockerror', this.onPointerLockErrorRef, false );
+		document.removeEventListener("mousemove", this.onMouseMoveRef, false);
+		document.removeEventListener("pointerlockchange", this.onPointerLockChangeRef, false);
+		document.removeEventListener("mozpointerlockchange", this.onPointerLockChangeRef, false);
+		document.removeEventListener("webkitpointerlockchange", this.onPointerLockChangeRef, false);
+		document.removeEventListener("pointerlockerror", this.onPointerLockErrorRef, false);
+		document.removeEventListener("mozpointerlockerror", this.onPointerLockErrorRef, false);
+		document.removeEventListener("webkitpointerlockerror", this.onPointerLockErrorRef, false);
 	}
-
-	/**
-	 * Manually exit pointer lock
-	 */
 	disconnect() {
 		this.dispose();
 	}
-
 	lock() {
 		this.onPointerLockChangeRef = (event) => this.onPointerLockChange(event);
-
-		document.addEventListener( 'pointerlockchange', this.onPointerLockChangeRef, false );
-		document.addEventListener( 'mozpointerlockchange', this.onPointerLockChangeRef, false );
-		document.addEventListener( 'webkitpointerlockchange', this.onPointerLockChangeRef, false );
-
+		document.addEventListener("pointerlockchange", this.onPointerLockChangeRef, false);
+		document.addEventListener("mozpointerlockchange", this.onPointerLockChangeRef, false);
+		document.addEventListener("webkitpointerlockchange", this.onPointerLockChangeRef, false);
 		this.onPointerLockErrorRef = (event) => this.onPointerLockError(event);
-
-		document.addEventListener( 'pointerlockerror', this.onPointerLockErrorRef, false );
-		document.addEventListener( 'mozpointerlockerror', this.onPointerLockErrorRef, false );
-		document.addEventListener( 'webkitpointerlockerror', this.onPointerLockErrorRef, false );
-
-		//request the pointer lock api with the specified element.
+		document.addEventListener("pointerlockerror", this.onPointerLockErrorRef, false);
+		document.addEventListener("mozpointerlockerror", this.onPointerLockErrorRef, false);
+		document.addEventListener("webkitpointerlockerror", this.onPointerLockErrorRef, false);
 		PointerLockUtils.requestPointerLock(this.pointerElement);
 	}
-
 	unlock() {
-		if (PointerLockUtils.isPointerLocked(this.pointerElement)) {
-			PointerLockUtils.exitPointerLock(this.pointerElement);
-		}
+		if (PointerLockUtils.isPointerLocked(this.pointerElement)) PointerLockUtils.exitPointerLock(this.pointerElement);
 	}
-
-	/**
-	 * Initiate pointer lock events.
-	 * Add the camera to the pitch object.
-	 * Add the yaw object to the scene.
-	 * Request the pointer lock.
-	 */
 	connect() {
-
 		this.onMouseMoveRef = (event) => this.onMouseMove(event);
-		document.addEventListener( 'mousemove', this.onMouseMoveRef, false );
+		document.addEventListener("mousemove", this.onMouseMoveRef, false);
 	}
-
-	update() {
-		//dummy update
-	}
-
-}
-
-export { PointerLockControls, PointerLockUtils };
+	update() {}
+};
+//#endregion
+export { PointerLockControls as default };

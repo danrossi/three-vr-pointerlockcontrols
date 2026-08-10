@@ -1,15 +1,19 @@
 {
   "name": "three-vr-pointerlockcontrols",
   "version": "0.153.0",
-  "description": "Three.js Omnitone Rotater",
-  "main": "build/three-vr-omnitone.js",
-  "module": "build/three-vr-omnitone.module.js",
+  "description": "Three.js Pointerlock Controls",
+  "module": "build/three-vr-pointerlockcontrols.module.js",
   "type": "module",
   "scripts": {
-    "build": "rollup -c rollup.config.js"
+    "build": "vite build"
   },
   "author": "danielr",
   "devDependencies": {
-    "rollup": "^4.60.1"
+    "@microsoft/api-extractor": "^7.58.12",
+    "@typescript/typescript6": "^6.0.2",
+    "three": "^0.185.1",
+    "typescript": "^7.0.2",
+    "unplugin-dts": "^1.0.3",
+    "vite": "^8.2.1"
   }
 }
