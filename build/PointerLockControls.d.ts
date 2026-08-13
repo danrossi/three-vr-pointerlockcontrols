@@ -4,12 +4,12 @@ export default class PointerLockControls extends EventDispatcher<any> {
      *
      * @param {Camera} camera
      * @param {Scene} scene
-     * @param {HTMLDivElement} element the element to lock the pointer to.
+     * @param {HTMLElement} element the element to lock the pointer to.
      */
-    constructor(camera: Camera, scene: Scene, element: HTMLDivElement);
+    constructor(camera: Camera, scene: Scene, element: HTMLElement);
     camera: Camera;
     scene: Scene;
-    pointerElement: HTMLDivElement;
+    pointerElement: HTMLElement;
     isLocked: boolean;
     minPolarAngle: number;
     maxPolarAngle: number;

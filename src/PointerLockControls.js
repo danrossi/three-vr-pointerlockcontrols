@@ -16,7 +16,7 @@ export default class PointerLockControls extends EventDispatcher {
    *
    * @param {Camera} camera
    * @param {Scene} scene
-   * @param {HTMLDivElement} element the element to lock the pointer to.
+   * @param {HTMLElement} element the element to lock the pointer to.
    */
   constructor(camera, scene, element) {
     super();
