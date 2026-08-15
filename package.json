@@ -1,18 +1,23 @@
 {
   "name": "three-vr-pointerlockcontrols",
-  "version": "0.153.0",
+  "version": "0.156.0",
   "description": "Three.js Pointerlock Controls",
   "module": "build/three-vr-pointerlockcontrols.module.js",
+  "types": "./index.d.ts",
   "type": "module",
   "scripts": {
     "build": "vite build"
   },
   "author": "danielr",
+  "overrides": {
+    "@microsoft/api-extractor": {
+      "typescript": "6.0.x"
+    }
+  },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.58.12",
     "@typescript/typescript6": "^6.0.2",
     "three": "^0.185.1",
-    "typescript": "^7.0.2",
     "unplugin-dts": "^1.0.3",
     "vite": "^8.2.1"
   }
