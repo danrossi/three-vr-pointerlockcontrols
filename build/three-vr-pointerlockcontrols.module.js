@@ -4,9 +4,9 @@ var PointerLockUtils = class {
 	static hasPointerLock() {
 		return "pointerLockElement" in document || "mozPointerLockElement" in document || "webkitPointerLockElement" in document;
 	}
-	static requestPointerLock(element) {
+	static async requestPointerLock(element) {
 		element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-		element.requestPointerLock();
+		return element.requestPointerLock();
 	}
 	static exitPointerLock(element) {
 		element.exitPointerLock = element.exitPointerLock || element.mozExitPointerLock || element.webkitExitPointerLock;
@@ -84,4 +84,4 @@ var PointerLockControls = class extends EventDispatcher {
 	update() {}
 };
 //#endregion
-export { PointerLockControls as default };
+export { PointerLockControls, PointerLockUtils };

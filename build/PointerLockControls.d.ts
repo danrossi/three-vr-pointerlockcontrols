@@ -15,20 +15,20 @@ export default class PointerLockControls extends EventDispatcher<any> {
     maxPolarAngle: number;
     /**
      * Pointer lock mouse movements. Handles rotation of yaw and pitch.
-     * @param {any} event
+     * @param {MouseEvent} event - the mouse event
      */
-    onMouseMove(event: any): void;
+    onMouseMove(event: MouseEvent): void;
     /**
      * Pointer lock change.
      * intitiates mouse movements on pointer lock or dispose events on exit.
-     * @param {any} event
+     * @param {Event} event
      */
-    onPointerLockChange(event: any): void;
+    onPointerLockChange(event: Event): void;
     /**
      * Dispose events on pointer lock error
-     * @param {any} event
+     * @param {Event} event
      */
-    onPointerLockError(event: any): void;
+    onPointerLockError(event: Event): void;
     /**
      * Dispose all pointer lock ad mouse events.
      * Remove the camera from the pitch object.
@@ -40,8 +40,18 @@ export default class PointerLockControls extends EventDispatcher<any> {
      */
     disconnect(): void;
     lock(): void;
-    onPointerLockChangeRef: ((event: any) => void) | undefined;
-    onPointerLockErrorRef: ((event: any) => void) | undefined;
+    /**
+     * Pointer lock change
+     * @private
+     * @param {Event} event
+     */
+    private onPointerLockChangeRef;
+    /**
+     * Pointer lock error
+     * @private
+     * @param {Event} event
+     */
+    private onPointerLockErrorRef;
     unlock(): void;
     /**
      * Initiate pointer lock events.

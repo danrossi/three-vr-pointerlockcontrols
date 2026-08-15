@@ -6,18 +6,19 @@ export class PointerLockUtils {
     static hasPointerLock(): boolean;
     /**
      * Request the pointer lock api.
-     * @param element
+     * @param {HTMLElement} element
+     * @returns {Promise<void>}
      */
-    static requestPointerLock(element: any): void;
+    static requestPointerLock(element: HTMLElement): Promise<void>;
     /**
      * Exit the pointer lock api.
-     * @param element
+     * @param {HTMLElement} element
      */
-    static exitPointerLock(element: any): void;
+    static exitPointerLock(element: HTMLElement): void;
     /**
      * Check if the current element is locked.
-     * @param element
+     * @param {HTMLElement} element
      * @returns {boolean}
      */
-    static isPointerLocked(element: any): boolean;
+    static isPointerLocked(element: HTMLElement): boolean;
 }

@@ -33,7 +33,7 @@ export default class PointerLockControls extends EventDispatcher {
 
   /**
    * Pointer lock mouse movements. Handles rotation of yaw and pitch.
-   * @param {any} event
+   * @param {MouseEvent} event - the mouse event
    */
   onMouseMove(event) {
     if (this.isLocked === false) return;
@@ -59,7 +59,7 @@ export default class PointerLockControls extends EventDispatcher {
   /**
    * Pointer lock change.
    * intitiates mouse movements on pointer lock or dispose events on exit.
-   * @param {any} event
+   * @param {Event} event
    */
   onPointerLockChange(event) {
     if (PointerLockUtils.isPointerLocked(this.pointerElement)) {
@@ -73,7 +73,7 @@ export default class PointerLockControls extends EventDispatcher {
 
   /**
    * Dispose events on pointer lock error
-   * @param {any} event
+   * @param {Event} event
    */
   onPointerLockError(event) {
     this.dispatchEvent({ type: 'pointerlockerror' });
@@ -128,6 +128,11 @@ export default class PointerLockControls extends EventDispatcher {
   }
 
   lock() {
+    /**
+     * Pointer lock change
+     * @private
+     * @param {Event} event
+     */
     this.onPointerLockChangeRef = (event) => this.onPointerLockChange(event);
 
     document.addEventListener(
@@ -146,6 +151,11 @@ export default class PointerLockControls extends EventDispatcher {
       false,
     );
 
+    /**
+     * Pointer lock error
+     * @private
+     * @param {Event} event
+     */
     this.onPointerLockErrorRef = (event) => this.onPointerLockError(event);
 
     document.addEventListener(
