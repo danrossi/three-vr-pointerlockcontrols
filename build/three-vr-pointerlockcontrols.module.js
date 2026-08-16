@@ -41,8 +41,11 @@ var PointerLockControls = class extends EventDispatcher {
 		this.camera.quaternion.setFromEuler(_euler);
 	}
 	onPointerLockChange(event) {
-		if (PointerLockUtils.isPointerLocked(this.pointerElement)) this.dispatchEvent({ type: "pointerlocked" });
-		else {
+		if (PointerLockUtils.isPointerLocked(this.pointerElement)) {
+			this.isLocked = true;
+			this.dispatchEvent({ type: "pointerlocked" });
+		} else {
+			this.isLocked = false;
 			this.dispatchEvent({ type: "pointerunlocked" });
 			this.dispose();
 		}

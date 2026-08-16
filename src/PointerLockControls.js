@@ -63,8 +63,10 @@ export default class PointerLockControls extends EventDispatcher {
    */
   onPointerLockChange(event) {
     if (PointerLockUtils.isPointerLocked(this.pointerElement)) {
+      this.isLocked = true;
       this.dispatchEvent({ type: 'pointerlocked' });
     } else {
+      this.isLocked = false;
       this.dispatchEvent({ type: 'pointerunlocked' });
 
       this.dispose();
